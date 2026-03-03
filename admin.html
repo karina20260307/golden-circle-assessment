@@ -913,10 +913,30 @@
         
         // ==================== 数据加载 ====================
         function loadData() {
-            const allResults = JSON.parse(localStorage.getItem('goldenCircleResults') || '[]');
-            renderStats(allResults);
-            renderTable(allResults);
+    // 尝试多种方式读取数据（兼容不同路径）
+    let dataStr = localStorage.getItem('goldenCircleResults');
+    
+    // 如果当前路径没有，尝试从根路径读取（解决GitHub Pages路径问题）
+    if (!dataStr || dataStr === '[]') {
+        // 检查是否有iframe或parent窗口的数据
+        try {
+            if (window.parent && window.parent !== window) {
+                dataStr = window.parent.localStorage.getItem('goldenCircleResults');
+            }
+        } catch(e) {
+            console.log('无法访问parent窗口');
         }
+    }
+    
+    const allResults = JSON.parse(dataStr || '[]');
+    renderStats(allResults);
+    renderTable(allResults);
+    
+    // 如果数据为空，显示提示
+    if (allResults.length === 0) {
+        console.log('暂无数据，请确保在同一会话中完成测评');
+    }
+}
         
         // ==================== 渲染统计 ====================
         function renderStats(data) {
