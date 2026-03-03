@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金圈测评 - 后台数据管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #D4A574;
+            --primary-dark: #B8935F;
+            --primary-light: #E8D4C0;
+            --secondary: #2C3E50;
+            --bg: #f5f5f5;
+            --card-bg: #FFFFFF;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #E5E5E5;
+            --success: #27AE60;
+            --danger: #E74C3C;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 登录页面 */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .login-header h1 {
+            font-size: 22px;
+            color: var(--secondary);
+        }
+        
+        .login-header p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #34495E;
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: #FDF9F4;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btn-group .btn {
+            flex: 1;
+        }
+        
+        .error-msg {
+            font-size: 13px;
+            color: var(--danger);
+            margin-top: 8px;
+            display: none;
+        }
+        
+        .error-msg.show {
+            display: block;
+        }
+        
+        /* 后台主页面 */
+        .admin-header {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .admin-header h1 {
+            font-size: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-header .logout-btn {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .admin-header .logout-btn:hover {
+            background: #f5f5f5;
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+        
+        /* 数据表格 */
+        .data-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .section-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            font-size: 16px;
+            color: var(--secondary);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: #f8f8f8;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        td {
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        tr:hover {
+            background: #fafafa;
+        }
+        
+        .stage-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .stage-awakening { background: #E8D4C0; color: #8B6914; }
+        .stage-exploration { background: #D4C4A8; color: #6B5A3E; }
+        .stage-breakthrough { background: #C4B896; color: #5A4D2E; }
+        .stage-creation { background: #B8A078; color: #4A3D1E; }
+        .stage-transition { background: #E5DDD0; color: #6B5D4D; }
+        .stage-unknown { background: #E8E8E8; color: #666; }
+        
+        .contact-cell {
+            font-family: monospace;
+            font-size: 13px;
+            color: var(--primary-dark);
+        }
+        
+        .time-cell {
+            font-size: 13px;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+        
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        /* 隐私提示 */
+        .privacy-notice {
+            background: linear-gradient(135deg, #FFF3CD 0%, #FFEAA7 100%);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .privacy-notice strong {
+            color: #856404;
+        }
+        
+        /* 导出选项 */
+        .export-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .export-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            background: #229954;
+        }
+        
+        .refresh-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background: #34495E;
+        }
+        
+        /* 报告弹窗 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-overlay.show {
+            display: block;
+        }
+        
+        .modal-content {
+            background: var(--bg);
+            max-width: 800px;
+            margin: 30px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background: var(--secondary);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-header .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .modal-header .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            padding: 25px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 20px 25px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* 报告样式 */
+        .report-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+        }
+        
+        .report-header {
+            text-align: center;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .report-badge {
+            display: inline-block;
+            background: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .report-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+        
+        .report-meta {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+        
+        .report-section {
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .report-section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .report-section-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        
+        .report-section-content p {
+            margin-bottom: 10px;
+        }
+        
+        .report-action-list {
+            list-style: none;
+        }
+        
+        .report-action-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .report-action-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .report-action-num {
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .report-encourage {
+            background: linear-gradient(135deg, #FDF9F4 0%, var(--primary-light) 100%);
+            border-radius: 10px;
+            padding: 18px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--secondary);
+            font-style: italic;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .report-footer-box {
+            background: var(--secondary);
+            color: white;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+        
+        .report-footer-box p {
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+        
+        .report-footer-box .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .report-disclaimer {
+            font-size: 11px;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .modal-overlay, .modal-overlay * {
+                visibility: visible;
+            }
+            .modal-overlay {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                overflow: visible;
+            }
+            .modal-content {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+            .modal-header, .modal-footer {
+                display: none !important;
+            }
+            .modal-body {
+                max-height: none;
+                overflow: visible;
+                padding: 0;
+            }
+            .report-container {
+                padding: 20px;
+            }
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .export-options {
+                width: 100%;
+            }
+            
+            .export-options button {
+                flex: 1;
+            }
+            
+            .modal-content {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .modal-body {
+                max-height: calc(100vh - 140px);
+            }
+        }
+        
+        /* 隐藏页面 */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="login-page" class="page active">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="logo">🔐</div>
+                    <h1>后台数据管理</h1>
+                    <p>黄金圈职业热爱探索测评</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">管理员账号</label>
+                    <input type="text" class="form-input" id="username" placeholder="请输入账号">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">密码</label>
+                    <input type="password" class="form-input" id="password" placeholder="请输入密码">
+                </div>
+                
+                <div class="error-msg" id="login-error">账号或密码错误</div>
+                
+                <button class="btn" onclick="login()">登录</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 后台主页面 -->
+    <div id="admin-page" class="page">
+        <div class="container">
+            <div class="admin-header">
+                <h1>📊 黄金圈职业热爱探索测评 - 数据管理后台</h1>
+                <div class="user-info">
+                    <span id="admin-name">管理员</span>
+                    <button class="logout-btn" onclick="logout()">退出登录</button>
+                </div>
+            </div>
+            
+            <div class="privacy-notice">
+                <span>🔒</span>
+                <div>
+                    <strong>数据安全提示：</strong>本后台仅展示客户基础信息及测评阶段结果，包含联系方式用于PDF报告发送及咨询对接。数据严格保密，请妥善保管账号密码。点击「查看报告」可查看单个客户的完整测评报告并导出PDF。
+                </div>
+            </div>
+            
+            <div class="stats-grid" id="stats-container">
+                <!-- 统计数据由JS生成 -->
+            </div>
+            
+            <div class="data-section">
+                <div class="section-header">
+                    <h2>📋 测评数据列表（按完成时间倒序）</h2>
+                    <div class="export-options">
+                        <button class="refresh-btn" onclick="loadData()">🔄 刷新数据</button>
+                        <button class="export-btn" onclick="exportToCSV()">📄 导出CSV</button>
+                        <button class="export-btn" onclick="exportToExcel()">📊 导出Excel</button>
+                    </div>
+                </div>
+                <div class="table-container" id="table-container">
+                    <!-- 表格由JS生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 报告详情弹窗 -->
+    <div id="report-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📄 测评详细报告</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- 报告内容由JS生成 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeModal()">关闭</button>
+                <button class="btn btn-success btn-sm" onclick="printReport()">🖨️ 打印/导出PDF</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 账号密码配置 ====================
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'golden2024'
+        };
+        
+        // 阶段内容模板（用于生成报告）
+        const stageContentTemplates = {
+            stageDescriptions: {
+                1: '你正处于职业觉醒阶段，内心开始察觉到现状与理想之间的落差。这是一个充满困惑但也孕育可能性的时期，你开始追问"我真正想要的是什么"。',
+                2: '你正处于职业探索阶段，actively 尝试不同的可能性。这是一个需要勇气的阶段，你愿意走出舒适区，去接触未知领域。',
+                3: '你正处于职业突破阶段，已在特定方向积累了一定基础，正面临从尝试到深耕的关键跨越。这是考验决心和执行力的时期。',
+                4: '你正处于职业创造阶段，已经建立起相对清晰的事业方向，正在将热爱转化为可持续的价值创造。这是收获与责任并存的阶段。'
+            },
+            workStatusContext: {
+                '全职在职': '在全职工作之余进行职业探索，需要更好地平衡主业与副业的时间投入',
+                '兼职': '灵活的兼职状态为你提供了探索空间，但也需要建立更清晰的边界',
+                '自由职业': '自由职业者的身份给予你灵活性，同时也需要你更强的自我管理能力',
+                '创业中': '创业之路充满挑战，资源整合和方向聚焦是当前的核心课题',
+                '职业空窗': '空窗期是难得的探索窗口，建立结构化的时间管理至关重要',
+                '其他': '无论处于何种状态，清晰的自我认知都是职业探索的基石'
+            },
+            traps: {
+                1: '<strong>陷阱一：过度思考，行动停滞。</strong>总是想"想清楚了再行动"，却陷入分析瘫痪。<strong>避坑法：</strong>设定"72小时行动原则"，有任何想法72小时内必须迈出最小一步。<br><br><strong>陷阱二：向外求答案。</strong>过度依赖他人建议，忽视内心真实声音。<strong>避坑法：</strong>每天预留15分钟"独处思考时间"，用纸笔记录真实感受。',
+                2: '<strong>陷阱一：广泛尝试，浅尝辄止。</strong>尝试了很多方向，但都只停留在表面。<strong>避坑法：</strong>采用"3个月深耕原则"，每个方向至少投入3个月再决定是否继续。<br><br><strong>陷阱二：信息过载。</strong>收集了大量信息却难以决策。<strong>避坑法：</strong>设定"信息截止时间"，列出3个决策关键标准，满足即行动。',
+                3: '<strong>陷阱一：完美主义拖延。</strong>总想准备万全再行动，错失时机。<strong>避坑法：</strong>践行"70分就出发"原则，允许自己在不完美中迭代。<br><br><strong>陷阱二：孤军奋战。</strong>试图独自解决所有问题，不愿求助。<strong>避坑法：</strong>建立"3人智囊团"，定期与同行或导师交流。',
+                4: '<strong>陷阱一：burnout。</strong>过度投入导致身心耗竭。<strong>避坑法：</strong>建立"能量补给清单"，每周预留专属恢复时间。<br><br><strong>陷阱二：路径依赖。</strong>固守已有模式，忽视环境变化。<strong>避坑法：</strong>每季度做一次"模式审视"，保持对新趋势的敏感度。'
+            },
+            actionTemplates: {
+                1: {
+                    '全职在职': ['每天记录"能量日志"：记录工作中哪些事项让你感到兴奋/疲惫，持续两周找出模式', '完成一份职业价值观排序练习，明确对你来说最重要的5个工作要素', '与3位不同行业的从业者进行"职业访谈"，了解他们的日常真实工作状态', '利用周末或下班后时间，尝试一件你感兴趣已久却一直没行动的小事'],
+                    '兼职': ['梳理当前兼职工作与理想方向的关联度，明确是过渡还是长期选择', '建立"能力迁移地图"，识别现有技能如何应用到新领域', '设定每周固定的"探索时间块"，系统性地了解目标行业', '与2-3位全职从事你感兴趣领域的人深度交流'],
+                    '自由职业': ['审视过去6个月的项目类型，分析哪些让你最有成就感', '建立个人作品集，提炼出最能代表你热情方向的3-5个案例', '主动接触目标领域的社群或圈子，建立弱关系连接', '尝试将部分工作内容向更感兴趣的方向倾斜'],
+                    '创业中': ['重新审视创业初心，明确当前业务与个人热情的契合度', '识别并梳理现有资源中可用于新方向探索的部分', '与同行创业者进行深度交流，了解他们在类似阶段的选择', '设定"探索预算"（时间/金钱），在不影响主业的前提下试错'],
+                    '职业空窗': ['建立每日结构化作息，设置固定的探索时间和休息时间', '列出10件"即使没有报酬也想做"的事，分析共同主题', '参加2-3个线上或线下的行业活动/课程，拓展信息渠道', '每周进行1次技能盘点，记录新学到的或发现需要提升的能力'],
+                    '其他': ['完成一份全面的自我盘点：优势、热情、价值观、生活优先级', '列出"人生愿景清单"，想象5年后理想的一天是怎样的', '与信任的朋友或家人交流，了解他们眼中的你擅长什么', '尝试"100小时探索法"：选择一个方向投入100小时深入学习']
+                },
+                2: {
+                    '全职在职': ['制定"下班后2小时计划"，将探索时间固定化、仪式化', '选择一个最感兴趣的方向，报名相关课程或找到入门学习资源', '在目标领域寻找"最小可行项目"机会，积累实际经验', '建立"成长账户"，每月预留一笔专门用于自我提升的预算'],
+                    '兼职': ['评估各兼职工作的ROI（回报/投入），逐步减少低价值投入', '选择1-2个主攻方向，拒绝其他分散精力的机会', '主动争取能够积累目标领域经验的项目或任务', '建立个人品牌，通过内容输出吸引目标领域的机会'],
+                    '自由职业': ['筛选客户和项目，逐步提高理想方向项目的占比', '建立被动收入或服务产品，减少完全依赖时间换钱的模式', '寻找1-2位同行伙伴建立"探索同盟"，互相督促进步', '定期复盘，每季度评估一次方向是否需要微调'],
+                    '创业中': ['进行市场调研，验证当前方向与市场需求的真实匹配度', '梳理核心竞争力，聚焦资源打造"尖刀产品/服务"', '建立关键合作伙伴关系，弥补自身资源短板', '设定明确的里程碑，定期检视进度并调整策略'],
+                    '职业空窗': ['制定"探索日程表"，将每天划分为学习、实践、社交、休息模块', '选择1个主攻方向进行深度学习，同时保持对1-2个备选方向的关注', '主动创造实践机会：志愿项目、实习、自由接单等', '建立求职或启动计划，设定明确的时间节点'],
+                    '其他': ['系统学习目标领域的基础知识，建立知识框架', '寻找实践机会，理论学习与实践验证相结合', '建立行业人脉网络，参加相关社群和活动', '设定阶段性目标，每完成一个小目标给予自己正向反馈']
+                },
+                3: {
+                    '全职在职': ['与上级沟通，争取在现有岗位中承担更多与热爱方向相关的项目', '制定"转型路线图"，设定从副业到全职的时间节点和条件', '建立目标领域的影响力，通过内容输出或社群参与建立个人品牌', '开始储备转型所需的资源和资金，降低决策压力'],
+                    '兼职': ['逐步增加理想方向的工作占比，设定明确的比例目标', '建立稳定的客户或收入来源，提高经济安全感', '完善专业体系，考取相关认证或完成代表性项目', '评估全职投入的时机，做好心理和物质准备'],
+                    '自由职业': ['优化商业模式，提高单位时间价值，减少重复性工作', '建立团队或合作网络，从个人服务向小团队运营升级', '沉淀方法论，将经验转化为课程、工具或咨询产品', '设定年度目标，平衡业务增长与个人成长'],
+                    '创业中': ['聚焦核心业务，勇敢砍掉非核心或低价值的产品线/服务', '建立标准化流程，提高运营效率，释放创始人时间', '培养核心团队，逐步从执行者向战略者转型', '保持现金流健康，为长期发展储备资源'],
+                    '职业空窗': ['将空窗期转化为"深度投入期"，全力积累目标领域的实战经验', '建立作品集和成果展示，弥补履历空白', '主动创造"被看见"的机会：开源贡献、社群分享、案例发布等', '准备好向雇主或合作伙伴讲述这段探索期的价值和收获'],
+                    '其他': ['确立专业定位，成为某个细分领域的"小专家"', '建立可展示的成果或案例，积累社会证明', '构建支持系统：导师、同伴、合作伙伴', '设定明确的突破目标，全力以赴攻克关键里程碑']
+                },
+                4: {
+                    '全职在职': ['成为内部变革者，将热爱转化为组织内的创新项目或新业务发展', '建立外部影响力，成为行业社群的活跃贡献者', '培养接班人，为团队赋能，从个人贡献者向领导者转型', '持续学习，保持对新趋势和新技术的敏感度'],
+                    '兼职': ['优化时间结构，在多元身份间建立更清晰的边界和协同', '探索跨界创新，将不同领域的经验融合创造新价值', '建立可持续的被动收入或自动化系统', '开始思考 legacy，如何将经验传承给后来者'],
+                    '自由职业': ['从服务提供者向平台搭建者或内容创作者转型', '建立可规模化的产品或服务，突破个人时间天花板', '培养下一代，通过 mentorship 实现价值的乘法效应', '定期审视工作与生活的平衡，防止过度燃烧'],
+                    '创业中': ['从创始人向企业家转型，建立不依赖创始人的组织系统', '思考企业使命和社会价值，平衡商业成功与意义创造', '建立创始人支持系统：顾问、教练、同行社群', '预留"创新时间"，保持对新机会的开放度'],
+                    '职业空窗': ['将探索成果转化为可分享的输出：博客、播客、课程等', '建立多元收入来源，构建抗风险能力强的个人商业模式', '成为探索者的同行者，帮助他人少走弯路', '定期复盘人生整体满意度，不仅关注职业也关注其他人生领域'],
+                    '其他': ['持续深化专业影响力，成为领域内的意见领袖', '探索事业与使命的融合，创造更大社会价值', '建立长期可持续发展的节奏，避免 burnout', '培养传承意识，将经验传递给下一代探索者']
+                }
+            },
+            developmentTemplates: {
+                1: {
+                    young: '<p><strong>【能力积累】</strong>25-30岁是试错成本最低的黄金期，重点在于广泛体验而非急于定位。建议将70%精力用于探索，30%用于深耕。利用业余时间参加不同类型的活动、课程、项目，通过"做中学"快速积累对自我和世界的认知。核心任务是建立"可能性地图"，了解有哪些选项。</p><p><strong>【资源整合】</strong>此阶段人脉网络比资金更重要。主动链接不同领域的从业者，参加行业活动和兴趣社群。寻找1-2位mentor，可以是比你大5-10岁的前辈。建立"学习账户"，每年预留专项预算用于自我投资。善用免费或低成本的在线资源快速入门。</p><p><strong>【阶段过渡】</strong>从觉醒到探索的关键是"迈出第一步"。克服"等我准备好"的思维，践行"边做边学"。设定"90天探索挑战"，在这90天内尽可能多地接触新领域。当某个方向让你持续兴奋超过3个月，就值得进一步深入探索。</p>',
+                    mid: '<p><strong>【能力积累】</strong>31-35岁需要在广泛探索的基础上开始聚焦。盘点过去5年积累的可迁移技能，思考如何应用到新领域。建议采用"T型发展策略"：在一个主攻方向深耕的同时，保持对相邻领域的关注。核心任务是从"寻找热情"转向"培养热情"——热情往往随能力提升而增强。</p><p><strong>【资源整合】</strong>此阶段应该开始有策略地构建人脉网络。识别并主动链接目标领域的关键人物，提供价值先于索取。评估现有资源（时间、金钱、人脉、知识）在职业探索中的配置，必要时调整生活开支结构，为转型储备"探索基金"。</p><p><strong>【阶段过渡】</strong>平衡现实压力与理想追求是核心挑战。采用"双轨制"策略：稳住当前收入来源的同时，稳步发展热爱方向。设定明确的过渡里程碑，如"1年内副业收入达到主业的30%"。当热爱方向展现出可持续性时，再考虑全职投入。</p>',
+                    senior: '<p><strong>【能力积累】</strong>36-40岁的探索应该建立在丰富人生阅历的基础上。你的优势是更清晰的自我认知和更强的执行力。重点不是从零开始，而是挖掘过去经历中隐藏的线索和模式。思考：哪些时刻让我最有成就感？我在什么情境下最能发挥影响力？核心任务是"整合"而非"重新开始"。</p><p><strong>【资源整合】</strong>此阶段你的资源和判断力都达到了较高水平。善用已有的人脉和信任基础，探索往往比年轻人更高效。考虑如何降低转型风险：财务储备、家庭沟通、渐进式过渡。利用"经验套利"——将你之前的行业经验带到新领域，往往能产生独特价值。</p><p><strong>【阶段过渡】</strong>从觉醒到探索需要克服"沉没成本"的心理障碍。记住：过去的经历不会浪费，它们都将成为新旅程的养分。设定清晰的探索边界：时间、金钱、机会成本。当找到方向后，利用你的执行力和资源快速建立立足点。</p>'
+                },
+                2: {
+                    young: '<p><strong>【能力积累】</strong>25-30岁的探索期应该追求"宽度+深度"的平衡。在保持一定广度的同时，对1-2个主要方向进行较深入的体验。每3-6个月进行一次方向复盘，问自己：这个方向是否依然吸引我？我是否看到了继续投入的价值？核心任务是验证假设，缩小选项范围。</p><p><strong>【资源整合】</strong>主动创造学习和实践的机会。争取参与跨部门项目、志愿活动、兼职或自由职业项目。建立"弱关系网络"——与不同领域的人保持联系，他们往往能带来意想不到的机会。利用社交媒体展示你的学习过程和思考，吸引同类人和机会。</p><p><strong>【阶段过渡】</strong>从探索到突破的标志是找到"甜蜜点"——热情、能力和市场需求的交汇点。当你发现某个方向让你愿意在困难时刻依然坚持，且能看到可行的变现或发展路径时，就是聚焦深耕的信号。开始减少其他方向的投入，将资源集中于主攻方向。</p>',
+                    mid: '<p><strong>【能力积累】</strong>31-35岁应该开始建立专业深度。选择1-2个主攻方向，系统性地积累知识和技能。设定具体的里程碑：完成特定课程、获得认证、完成代表性项目。同时保持对行业趋势的敏感度，确保你的技能组合符合市场需求。核心任务是从"爱好者"成长为"准专业人士"。</p><p><strong>【资源整合】</strong>此阶段应该开始有选择地投入资源。评估哪些学习和实践机会ROI最高，优先投入。建立行业内的"强关系"——深度连接的同行、导师、潜在合作伙伴。开始思考如何将你正在发展的能力转化为收入，即使金额不大也是重要的验证。</p><p><strong>【阶段过渡】</strong>突破期的关键是"承诺"。当你对方向有了足够的信心，就需要做出更大胆的投入决定。这可能意味着辞职、创业、或大幅调整当前工作重心。设定清晰的决策标准：积累到什么程度、达到什么验证结果就全力投入。信任你的直觉，但也要用理性评估支撑决策。</p>',
+                    senior: '<p><strong>【能力积累】</strong>36-40岁的探索应该更加聚焦和高效。你的学习速度和资源整合能力都更强，可以更快速地在新领域建立立足点。重点是将之前的经验与新领域结合，创造独特的价值主张。核心任务是快速验证模式，缩短从0到1的周期。</p><p><strong>【资源整合】</strong>善用你的阅历和人脉进行"资源杠杆"。你可能不需要像年轻人那样从零开始，而是可以通过合作、投资、顾问等方式快速进入新领域。考虑组建团队或寻找合伙人，弥补你可能缺乏的时间或精力。建立"顾问团"——在你探索的领域有经验的人，定期向他们请教。</p><p><strong>【阶段过渡】</strong>从探索到突破对你而言更多是心态转变而非能力问题。你可能已经具备了很多所需能力，需要的是全心投入的决心。评估现有承诺（家庭、财务、社会角色），与重要他人充分沟通，创造支持你突破的环境。当条件成熟时，果断行动。</p>'
+                },
+                3: {
+                    young: '<p><strong>【能力积累】</strong>25-30岁就能达到突破阶段是难得的，说明你已有清晰的方向和较强的执行力。此时的重点是"深耕"——在选定的领域建立真正的专业壁垒。追求"精通"而非"了解"，找到该领域最优秀的人学习。核心任务是建立代表作和口碑，让你在领域内被看见。</p><p><strong>【资源整合】</strong>开始建立个人品牌和影响力。通过内容输出、社群参与、演讲分享等方式让更多人知道你的专业。寻找mentor或加入高质量同行社群，与更优秀的人同行。审慎评估机会，对不符合主攻方向的诱惑说"不"。建立长期合作伙伴关系，共同成长。</p><p><strong>【阶段过渡】</strong>从突破到创造的标志是你的工作开始产生系统性的价值影响。你开始不仅为自己工作，而是在为更大的群体或使命工作。思考：我如何能让我的影响力超越个人时间？这可能就是产品化、团队化、或平台化的开始。保持耐心，深耕期需要时间沉淀。</p>',
+                    mid: '<p><strong>【能力积累】</strong>31-35岁的突破阶段需要平衡"深度"与"可持续性"。在追求专业精进的同时，注意防止 burnout。建立支持系统：团队、工具、流程，让你的工作更高效。开始思考如何将你的能力转化为可规模化的价值。核心任务是从"做事"向"建系统"转变。</p><p><strong>【资源整合】</strong>此阶段应该建立更成熟的商业或个人发展模式。评估收入来源的多样性，降低单一依赖风险。建立"核心圈"——深度信任的合作者和顾问。开始为下一阶段储备资源：资金、人才、机会。保持对市场的敏感度，确保你的方向与趋势一致。</p><p><strong>【阶段过渡】</strong>突破到创造是质变的过程。当你发现自己在解决的不只是个人生存问题，而是在回应更大的社会需求时，你就正在进入创造阶段。思考你的 legacy：我希望因为什么被记住？如何让我的创造持续产生价值？</p>',
+                    senior: '<p><strong>【能力积累】</strong>36-40岁的突破阶段应该追求"智慧型精通"。你不仅有技能，还有判断力——知道什么是重要的、什么是该放弃的。将你的经验提炼为方法论，能够指导他人。核心任务是从"个人贡献者"向"价值放大者"转变，让你的经验和智慧影响更多人。</p><p><strong>【资源整合】</strong>此阶段你有丰富的资源可以调配。思考如何构建一个支持你的愿景的生态系统：合作伙伴、团队、平台。开始考虑 legacy 建设：mentorship、内容创作、社会贡献。建立可持续的商业模式，让你的创造能够持续而不依赖你的全时投入。</p><p><strong>【阶段过渡】</strong>从突破到创造对你而言是自然的过程。你已经证明了模式的可行性，现在是如何放大影响。思考更宏大的愿景：我希望创造什么样的改变？为此需要联合谁、建立什么？允许自己从执行中逐步退出，更多地在战略和愿景层面发挥影响力。</p>'
+                },
+                4: {
+                    young: '<p><strong>【能力积累】</strong>25-30岁就进入创造阶段是非常罕见的，说明你既有清晰的热情方向，又有超越同龄人的执行力。此时的挑战是"可持续"——如何在保持创造热情的同时避免过早 burnout。建立健康的工作节奏，投资身心健康。核心任务是建立支持系统，让你的创造能够持续而非依赖个人燃烧。</p><p><strong>【资源整合】</strong>开始构建团队或合作网络，从个人创造向组织创造转变。建立品牌资产：知识产权、内容资产、社群资产。思考如何让你的创造产生复利效应。寻找mentor或同行者，创造阶段的孤独感可能更强，需要支持系统。</p><p><strong>【阶段延续】</strong>创造不是终点而是持续的过程。保持学习和进化，今天的成功模式可能明天就会过时。定期审视：我的创造是否仍然与我的热情和价值观一致？是否仍然服务于我真正在乎的人群？保持初心，同时拥抱变化。</p>',
+                    mid: '<p><strong>【能力积累】</strong>31-35岁的创造阶段应该追求"影响力的深化"。不仅做更多，而是做更有价值的事。思考如何从你的创造中提取更大的杠杆：团队培养、方法论沉淀、平台搭建。核心任务是从"创造者"向"赋能者"转变，让你的创造能够激发更多人的创造。</p><p><strong>【资源整合】</strong>建立多元化的价值创造系统。除了主营业务，考虑知识分享、投资、顾问等多元角色。构建"生态位"——你在某个细分领域的不可替代性。建立长期主义视角，投资那些短期回报不明显但长期重要的资产。</p><p><strong>【阶段延续】</strong>创造阶段的最大风险是停滞或重复自己。保持对新可能性的开放，定期进行"战略刷新"。思考下一阶段：是深化现有方向，还是开辟新的创造领域？保持与初心和使命的连接，让你的创造持续有意义。</p>',
+                    senior: '<p><strong>【能力积累】</strong>36-40岁的创造阶段应该追求"智慧的传承"。你积累的不仅是技能和成果，更是判断力和智慧。将这些隐性知识显性化，通过 mentorship、内容创作、咨询等方式传递给下一代。核心任务是从"做"向"教"转变，让你的经验成为他人的养分。</p><p><strong>【资源整合】</strong>利用你的影响力和资源创造更大的社会价值。考虑社会企业、公益项目、行业推动等方式回馈社会。建立"接班人"或团队，让你的创造能够在没有你的情况下继续。构建支持系统防止 burnout，创造阶段的责任和压力可能很大。</p><p><strong>【阶段延续】</strong>创造是一个不断进化的过程，没有终点。定期审视人生的整体满意度：职业成功是否伴随着其他人生领域的丰盛？考虑如何整合职业、家庭、健康、社会贡献，追求更全面的"人生创造"。保持谦逊和好奇心，继续学习和成长。</p>'
+                }
+            },
+            encouragements: {
+                1: '觉察本身就是改变的开始。你已经开始了一场重要的人生对话——与真实的自己对话。这个阶段可能充满不确定和焦虑，但请相信：每一个勇敢的觉察，都在为未来的清晰铺路。你不需要立刻知道答案，只需要保持对内心的诚实。',
+                2: '探索的勇气比探索的结果更珍贵。你正在用行动回应内心的召唤，这已经超越了大多数人。每一次尝试、每一次对话、每一次学习，都在为你积累未来的可能性。相信自己的直觉，同时保持开放——惊喜往往在意料之外。',
+                3: '突破的路上没有容易二字，但正是这份不易塑造了真正的你。你已经走过了探索和尝试的阶段，现在需要的是坚持和深耕。遇到困难时，记得提醒自己为什么出发。你的热爱值得这份投入，世界也在等待你独特的贡献。',
+                4: '你已经在用行动将热爱转化为价值，这本身就是一种成就。创造的路上请记得照顾好自己，sustainable的创造比爆发式的燃烧更珍贵。你的经验正在激励和影响着他人，这份 legacy 将超越时间和空间。'
+            }
+        };
+        
+        // ==================== 登录功能 ====================
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                sessionStorage.setItem('goldenCircleAdmin', 'loggedIn');
+                document.getElementById('login-error').classList.remove('show');
+                showAdminPage();
+            } else {
+                document.getElementById('login-error').classList.add('show');
+            }
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('goldenCircleAdmin');
+            showLoginPage();
+        }
+        
+        function checkLogin() {
+            if (sessionStorage.getItem('goldenCircleAdmin') === 'loggedIn') {
+                showAdminPage();
+            } else {
+                showLoginPage();
+            }
+        }
+        
+        function showLoginPage() {
+            document.getElementById('login-page').classList.add('active');
+            document.getElementById('admin-page').classList.remove('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+        
+        function showAdminPage() {
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('admin-page').classList.add('active');
+            loadData();
+        }
+        
+        // ==================== 数据加载 ====================
+        function loadData() {
+            const allResults = JSON.parse(localStorage.getItem('goldenCircleResults') || '[]');
+            renderStats(allResults);
+            renderTable(allResults);
+        }
+        
+        // ==================== 渲染统计 ====================
+        function renderStats(data) {
+            const totalCount = data.length;
+            const stageCount = { 1: 0, 2: 0, 3: 0, 4: 0 };
+            let unknownCount = 0;
+            let transitionCount = 0;
+            
+            data.forEach(r => {
+                if (r.result.isUnknown) {
+                    unknownCount++;
+                } else if (r.result.isTransition) {
+                    transitionCount++;
+                } else {
+                    stageCount[r.result.stage]++;
+                }
+            });
+            
+            const html = `
+                <div class="stat-card">
+                    <div class="stat-value">${totalCount}</div>
+                    <div class="stat-label">总测评人数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stageCount[1]}</div>
+                    <div class="stat-label">觉醒阶段</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stageCount[2]}</div>
+                    <div class="stat-label">探索阶段</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stageCount[3]}</div>
+                    <div class="stat-label">突破阶段</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stageCount[4]}</div>
+                    <div class="stat-label">创造阶段</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${transitionCount}</div>
+                    <div class="stat-label">过渡期</div>
+                </div>
+            `;
+            
+            document.getElementById('stats-container').innerHTML = html;
+        }
+        
+        // ==================== 渲染表格 ====================
+        function renderTable(data) {
+            if (data.length === 0) {
+                document.getElementById('table-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>暂无测评数据</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const stageNames = { 1: '觉醒', 2: '探索', 3: '突破', 4: '创造' };
+            const stageClasses = {
+                1: 'stage-awakening',
+                2: 'stage-exploration',
+                3: 'stage-breakthrough',
+                4: 'stage-creation'
+            };
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>客户姓名</th>
+                            <th>年龄</th>
+                            <th>职业</th>
+                            <th>在职状态</th>
+                            <th>联系方式</th>
+                            <th>判定阶段</th>
+                            <th>完成时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            data.slice().reverse().forEach((r, index) => {
+                const date = new Date(r.createdAt);
+                const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+                
+                let stageText, stageClass;
+                if (r.result.isUnknown) {
+                    stageText = '阶段未明';
+                    stageClass = 'stage-unknown';
+                } else if (r.result.isTransition) {
+                    stageText = `${stageNames[r.result.transitionStage]}-${stageNames[r.result.transitionStage + 1]} 过渡期`;
+                    stageClass = 'stage-transition';
+                } else {
+                    stageText = stageNames[r.result.stage];
+                    stageClass = stageClasses[r.result.stage];
+                }
+                
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${r.userInfo.name}</td>
+                        <td>${r.userInfo.age}岁</td>
+                        <td>${r.userInfo.occupation}</td>
+                        <td>${r.userInfo.workStatus}</td>
+                        <td class="contact-cell">${r.userInfo.contact}</td>
+                        <td><span class="stage-badge ${stageClass}">${stageText}</span></td>
+                        <td class="time-cell">${dateStr}</td>
+                        <td>
+                            <button class="btn btn-sm" onclick="viewReport('${r.id}')">查看报告</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('table-container').innerHTML = html;
+        }
+        
+        // ==================== 查看报告 ====================
+        function viewReport(resultId) {
+            const allResults = JSON.parse(localStorage.getItem('goldenCircleResults') || '[]');
+            const result = allResults.find(r => r.id === resultId);
+            
+            if (!result) {
+                alert('报告不存在');
+                return;
+            }
+            
+            const reportHtml = generateReportHtml(result);
+            document.getElementById('modal-body').innerHTML = reportHtml;
+            document.getElementById('report-modal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            document.getElementById('report-modal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        function printReport() {
+            window.print();
+        }
+        
+        // ==================== 生成报告HTML ====================
+        function generateReportHtml(data) {
+            const stage = data.result.stage;
+            const workStatus = data.userInfo.workStatus;
+            const age = data.userInfo.age;
+            
+            let ageGroup = 'young';
+            if (age > 30 && age <= 35) ageGroup = 'mid';
+            else if (age > 35) ageGroup = 'senior';
+            
+            const stageNames = { 1: '觉醒', 2: '探索', 3: '突破', 4: '创造' };
+            const stageClasses = {
+                1: 'stage-awakening',
+                2: 'stage-exploration',
+                3: 'stage-breakthrough',
+                4: 'stage-creation'
+            };
+            
+            let stageDisplay = stageNames[stage];
+            let stageClass = stageClasses[stage];
+            
+            if (data.result.isUnknown) {
+                stageDisplay = '阶段未明，建议深入探索';
+                stageClass = 'stage-unknown';
+            } else if (data.result.isTransition) {
+                const s1 = stageNames[data.result.transitionStage];
+                const s2 = stageNames[data.result.transitionStage + 1];
+                stageDisplay = `${s1}-${s2} 过渡期`;
+                stageClass = 'stage-transition';
+            }
+            
+            const content = generateStageContent(data.result, data.userInfo);
+            
+            return `
+                <div class="report-container">
+                    <div class="report-header">
+                        <div class="report-badge ${stageClass}">${stageDisplay}</div>
+                        <div class="report-name">${data.userInfo.name}的职业探索之旅</div>
+                        <div class="report-meta">${data.userInfo.occupation} · ${data.userInfo.workStatus} · ${data.userInfo.age}岁 · ${data.userInfo.contact}</div>
+                    </div>
+                    
+                    <div class="report-section">
+                        <div class="report-section-title">🎯 你的当前阶段</div>
+                        <div class="report-section-content">
+                            <p>${content.stageDescription}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="report-section">
+                        <div class="report-section-title">⚠️ 本阶段常见陷阱与避坑提示</div>
+                        <div class="report-section-content">
+                            <p>${content.traps}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="report-section">
+                        <div class="report-section-title">✅ 本阶段核心行动清单</div>
+                        <div class="report-section-content">
+                            <ul class="report-action-list">
+                                ${content.actions.map((a, i) => `
+                                    <li>
+                                        <span class="report-action-num">${i + 1}</span>
+                                        <span>${a}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="report-section">
+                        <div class="report-section-title">🚀 专属发展方向建议</div>
+                        <div class="report-section-content">
+                            ${content.development}
+                        </div>
+                    </div>
+                    
+                    <div class="report-section">
+                        <div class="report-section-title">💝 给你的看见与鼓励</div>
+                        <div class="report-encourage">
+                            ${content.encouragement}
+                        </div>
+                    </div>
+                    
+                    <div class="report-footer-box">
+                        <p>本次测评完整 <strong class="highlight">PDF 版报告</strong>将由工作人员通过您填写的<br><strong class="highlight">微信 / 手机号</strong>主动联系发送</p>
+                        <p>同时可预约 <strong class="highlight">1v1 测评解读咨询</strong>，深度分析你的职业探索路径～</p>
+                    </div>
+                    
+                    <div class="report-disclaimer">
+                        本测评基于职业心理学经典理论开发，结果仅供个人职业探索参考，不构成职业决策唯一依据；您的个人信息仅用于报告发送及咨询对接，严格保密，不作其他用途
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ==================== 生成阶段内容 ====================
+        function generateStageContent(result, userInfo) {
+            const stage = result.stage;
+            const workStatus = userInfo.workStatus;
+            const age = userInfo.age;
+            const isTransition = result.isTransition;
+            
+            let ageGroup = 'young';
+            if (age > 30 && age <= 35) ageGroup = 'mid';
+            else if (age > 35) ageGroup = 'senior';
+            
+            const stageNames = { 1: '觉醒', 2: '探索', 3: '突破', 4: '创造' };
+            const t = stageContentTemplates;
+            
+            if (isTransition) {
+                return {
+                    stageDescription: `你正处于${stageNames[result.transitionStage]}与${stageNames[result.transitionStage + 1]}的过渡期。这意味着你既具备前一阶段的特征，又开始展现出后一阶段的潜力。${t.stageDescriptions[result.transitionStage]} 同时，你也开始感受到下一阶段的力量在召唤。这是一个充满可能性的时期，保持耐心，让转变自然发生。`,
+                    traps: t.traps[result.transitionStage] + '<br><br><strong>【过渡期特别陷阱】</strong>在两个阶段之间摇摆不定，既想保持旧有模式的安全感，又渴望新阶段的可能性。避坑法：接纳这是一个自然的过渡过程，给自己时间整合两个阶段的资源，不必急于"站队"。',
+                    actions: t.actionTemplates[result.transitionStage][workStatus],
+                    development: t.developmentTemplates[result.transitionStage][ageGroup] + '<p><strong>【过渡期特别提示】</strong>过渡期不是"问题"而是"机会"。利用这个阶段整合两个阶段的资源和经验，你可能会创造出独特的路径。不要急于给自己贴标签，允许自己处于一个"既...又..."的状态。当准备就绪时，转变会自然发生。</p>',
+                    encouragement: t.encouragements[result.transitionStage] + ' 同时，下一阶段的新可能正在向你招手，保持开放和期待。'
+                };
+            }
+            
+            if (result.isUnknown) {
+                return {
+                    stageDescription: `根据测评结果，你当前的职业探索阶段尚不够清晰。这可能意味着你正处于一个重大转变期，或者同时受到多个方向的影响。不必担心，这反而是重新审视自己的好机会。${t.workStatusContext[workStatus]}。建议你给自己更多时间和空间，允许答案慢慢浮现。`,
+                    traps: '<strong>陷阱一：急于给自己贴标签。</strong>因为想要明确答案而过早做出选择。<strong>避坑法：</strong>接纳模糊性，给自己3-6个月的"探索宽限期"，不急于下结论。<br><br><strong>陷阱二：信息收集瘫痪。</strong>收集了大量信息但无法整合决策。<strong>避坑法：</strong>设定"最小决策标准"，列出3个最关键的因素，满足即行动。',
+                    actions: [
+                        '暂停"找答案"，先进行"整理"：写下你所有的兴趣、可能性、顾虑，梳理混乱的思绪',
+                        '与3-5位不同背景的人深度交流，了解他们是如何找到自己的方向的',
+                        '尝试"100小时法则"：选择1-2个最感兴趣的方向，各投入50小时深入体验后再评估',
+                        '建立"每日觉察练习"：每天花10分钟记录什么让你感到兴奋、什么让你感到 drained'
+                    ],
+                    development: '<p><strong>【能力积累】</strong>阶段不清晰往往是自我认知需要更新的信号。利用这段时间进行全面的自我盘点：价值观、优势、兴趣、生活优先级。尝试不同类型的测评工具（MBTI、盖洛普优势、霍兰德等）作为参考，但不要被定义。核心任务是"重新认识自己"——可能你已经改变，只是还没来得及更新自我认知。</p><p><strong>【资源整合】</strong>这个阶段人脉资源尤为重要。主动与不同领域的人交流，不是为了找答案，而是为了拓宽视野。参加一些跨界活动或社群，让自己接触不同的思维方式。考虑寻求职业咨询师或教练的支持，专业人士能帮助你更快地梳理混乱。</p><p><strong>【阶段定位】</strong>阶段不清晰不是失败，而是深度的前奏。很多重要的转变都始于一段"迷失期"。保持基本的日常结构（作息、健康、社交），在此基础上允许探索。设定一个"再评估时间点"（如3个月后），到那时如果仍然不清晰，再寻求更多外部支持。</p>',
+                    encouragement: '迷茫不是错误，而是成长的邀请。在这个看似"卡住"的时刻，你其实正在经历重要的内在整合。对自己温柔一点，答案往往在最放松的时候浮现。你已经迈出了最重要的一步——开始寻找。相信过程，相信自己。'
+                };
+            }
+            
+            return {
+                stageDescription: t.stageDescriptions[stage] + t.workStatusContext[workStatus] + '。',
+                traps: t.traps[stage],
+                actions: t.actionTemplates[stage][workStatus],
+                development: t.developmentTemplates[stage][ageGroup],
+                encouragement: t.encouragements[stage]
+            };
+        }
+        
+        // ==================== 导出功能 ====================
+        function exportToCSV() {
+            const data = JSON.parse(localStorage.getItem('goldenCircleResults') || '[]');
+            if (data.length === 0) {
+                alert('暂无数据可导出');
+                return;
+            }
+            
+            const stageNames = { 1: '觉醒', 2: '探索', 3: '突破', 4: '创造' };
+            
+            let csv = '\uFEFF';
+            csv += '序号,客户姓名,年龄,职业,在职状态,联系方式,判定阶段,测评完成时间\n';
+            
+            data.slice().reverse().forEach((r, index) => {
+                const date = new Date(r.createdAt);
+                const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+                
+                let stageText;
+                if (r.result.isUnknown) {
+                    stageText = '阶段未明';
+                } else if (r.result.isTransition) {
+                    stageText = `${stageNames[r.result.transitionStage]}-${stageNames[r.result.transitionStage + 1]}过渡期`;
+                } else {
+                    stageText = stageNames[r.result.stage];
+                }
+                
+                csv += `${index + 1},${r.userInfo.name},${r.userInfo.age},${r.userInfo.occupation},${r.userInfo.workStatus},${r.userInfo.contact},${stageText},${dateStr}\n`;
+            });
+            
+            downloadFile(csv, 'golden_circle_assessment_data.csv', 'text/csv;charset=utf-8;');
+        }
+        
+        function exportToExcel() {
+            const data = JSON.parse(localStorage.getItem('goldenCircleResults') || '[]');
+            if (data.length === 0) {
+                alert('暂无数据可导出');
+                return;
+            }
+            
+            const stageNames = { 1: '觉醒', 2: '探索', 3: '突破', 4: '创造' };
+            
+            let html = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        table { border-collapse: collapse; }
+                        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                        th { background-color: #f0f0f0; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>客户姓名</th>
+                                <th>年龄</th>
+                                <th>职业</th>
+                                <th>在职状态</th>
+                                <th>联系方式</th>
+                                <th>判定阶段</th>
+                                <th>测评完成时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.slice().reverse().forEach((r, index) => {
+                const date = new Date(r.createdAt);
+                const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+                
+                let stageText;
+                if (r.result.isUnknown) {
+                    stageText = '阶段未明';
+                } else if (r.result.isTransition) {
+                    stageText = `${stageNames[r.result.transitionStage]}-${stageNames[r.result.transitionStage + 1]}过渡期`;
+                } else {
+                    stageText = stageNames[r.result.stage];
+                }
+                
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${r.userInfo.name}</td>
+                        <td>${r.userInfo.age}</td>
+                        <td>${r.userInfo.occupation}</td>
+                        <td>${r.userInfo.workStatus}</td>
+                        <td>${r.userInfo.contact}</td>
+                        <td>${stageText}</td>
+                        <td>${dateStr}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></body></html>';
+            
+            downloadFile(html, 'golden_circle_assessment_data.xls', 'application/vnd.ms-excel;charset=utf-8;');
+        }
+        
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+        
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLogin();
+            
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+            
+            // 点击遮罩关闭弹窗
+            document.getElementById('report-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

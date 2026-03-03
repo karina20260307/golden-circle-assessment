@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>黄金圈职业热爱探索测评</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #D4A574;
+            --primary-dark: #B8935F;
+            --primary-light: #E8D4C0;
+            --secondary: #2C3E50;
+            --bg: #FAF8F5;
+            --card-bg: #FFFFFF;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #E5E5E5;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .form-label .required {
+            color: #E74C3C;
+            margin-left: 2px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: var(--bg);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--card-bg);
+        }
+        
+        .form-input.error {
+            border-color: #E74C3C;
+            background: #FEF2F2;
+        }
+        
+        .input-hint {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+        
+        .input-hint.privacy {
+            color: #27AE60;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .error-msg {
+            font-size: 12px;
+            color: #E74C3C;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .error-msg.show {
+            display: block;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg);
+        }
+        
+        .radio-item:hover {
+            border-color: var(--primary-light);
+            background: #FDF9F4;
+        }
+        
+        .radio-item.selected {
+            border-color: var(--primary);
+            background: #FDF9F4;
+        }
+        
+        .radio-item input {
+            display: none;
+        }
+        
+        .radio-dot {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .radio-item.selected .radio-dot {
+            border-color: var(--primary);
+        }
+        
+        .radio-dot::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s;
+        }
+        
+        .radio-item.selected .radio-dot::after {
+            transform: scale(1);
+        }
+        
+        .radio-text {
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid var(--primary);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            padding: 10px 0;
+            margin: -20px -20px 20px;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+        
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .likert-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .likert-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: var(--bg);
+        }
+        
+        .likert-item:hover {
+            border-color: var(--primary-light);
+            background: #FDF9F4;
+        }
+        
+        .likert-item.selected {
+            border-color: var(--primary);
+            background: #FDF9F4;
+        }
+        
+        .likert-item input {
+            display: none;
+        }
+        
+        .likert-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        
+        .likert-item.selected .likert-number {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .likert-text {
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        .likert-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 0 4px;
+        }
+        
+        .likert-label {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .nav-buttons .btn {
+            flex: 1;
+        }
+        
+        .nav-buttons .btn-secondary {
+            flex: 0.4;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .result-header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .result-badge {
+            display: inline-block;
+            background: white;
+            color: var(--primary-dark);
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .result-stage {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+        
+        .result-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .result-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        
+        .result-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .result-section-title .icon {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .result-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        
+        .result-content p {
+            margin-bottom: 12px;
+        }
+        
+        .action-list {
+            list-style: none;
+        }
+        
+        .action-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .action-num {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .action-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        
+        .encourage-box {
+            background: linear-gradient(135deg, #FDF9F4 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--secondary);
+            font-style: italic;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .report-box {
+            background: var(--secondary);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .report-box p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        
+        .report-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .report-box .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .disclaimer {
+            font-size: 12px;
+            color: var(--text-light);
+            text-align: center;
+            padding: 20px;
+            margin-top: 10px;
+            border-top: 1px solid var(--border);
+            line-height: 1.6;
+        }
+        
+        .submit-success-banner {
+            background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .submit-success-banner .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .submit-success-banner h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .submit-success-banner p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        .screenshot-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+            border: none;
+            z-index: 99;
+            transition: all 0.3s;
+        }
+        
+        .screenshot-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .stage-awakening { background: #E8D4C0; color: #8B6914; }
+        .stage-exploration { background: #D4C4A8; color: #6B5A3E; }
+        .stage-breakthrough { background: #C4B896; color: #5A4D2E; }
+        .stage-creation { background: #B8A078; color: #4A3D1E; }
+        .stage-transition { background: #E5DDD0; color: #6B5D4D; }
+        .stage-unknown { background: #E8E8E8; color: #666; }
+        
+        @media (max-width: 480px) {
+            .container { padding: 15px; }
+            .header { padding: 20px 0; }
+            .header h1 { font-size: 20px; }
+            .card, .question-card, .result-section { padding: 20px; }
+            .result-stage { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 首页 - 信息填写 -->
+        <div id="page-info" class="page">
+            <div class="header">
+                <div class="logo">💫</div>
+                <h1>黄金圈职业热爱探索测评</h1>
+                <p>基于舒伯生涯发展、职业锚、SCCT及自我决定理论</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">基础信息</div>
+                
+                <div class="form-group">
+                    <label class="form-label">客户姓名<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="name" placeholder="请输入您的姓名">
+                    <div class="error-msg" id="name-error">请输入姓名</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">年龄<span class="required">*</span></label>
+                    <input type="number" class="form-input" id="age" placeholder="请输入您的年龄（20-50岁）" min="20" max="50">
+                    <div class="error-msg" id="age-error">年龄需在20-50岁之间</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">职业<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="occupation" placeholder="请输入您的职业">
+                    <div class="error-msg" id="occupation-error">请输入职业</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">在职状态<span class="required">*</span></label>
+                    <div class="radio-group" id="work-status-group">
+                        <label class="radio-item">
+                            <input type="radio" name="workStatus" value="全职在职">
+                            <span class="radio-dot"></span>
+                            <span class="radio-text">全职在职</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="workStatus" value="兼职">
+                            <span class="radio-dot"></span>
+                            <span class="radio-text">兼职</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="workStatus" value="自由职业">
+                            <span class="radio-dot"></span>
+                            <span class="radio-text">自由职业</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="workStatus" value="创业中">
+                            <span class="radio-dot"></span>
+                            <span class="radio-text">创业中</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="workStatus" value="职业空窗">
+                            <span class="radio-dot"></span>
+                            <span class="radio-text">职业空窗</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="workStatus" value="其他">
+                            <span class="radio-dot"></span>
+                            <span class="radio-text">其他</span>
+                        </label>
+                    </div>
+                    <div class="error-msg" id="work-status-error">请选择在职状态</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">您的微信 / 手机号<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="contact" placeholder="请输入微信号或手机号">
+                    <div class="input-hint privacy">
+                        🔒 用于发送 PDF 报告及 1v1 咨询对接，严格保密，不作其他用途
+                    </div>
+                    <div class="error-msg" id="contact-error">请输入微信号或手机号</div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="startAssessment()">开始测评</button>
+        </div>
+        
+        <!-- 测评页面 -->
+        <div id="page-assessment" class="page" style="display:none;">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progress-text">第 1 / 25 题</div>
+            </div>
+            
+            <div id="questions-container"></div>
+            
+            <div class="nav-buttons" id="nav-buttons" style="display:none;">
+                <button class="btn btn-secondary" onclick="prevQuestion()">上一题</button>
+                <button class="btn" onclick="nextQuestion()" id="next-btn">下一题</button>
+            </div>
+        </div>
+        
+        <!-- 加载页面 -->
+        <div id="page-loading" class="page" style="display:none;">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">正在生成您的专属测评报告...</div>
+            </div>
+        </div>
+        
+        <!-- 结果页面 -->
+        <div id="page-result" class="page" style="display:none;">
+            <!-- 提交成功提示 -->
+            <div class="submit-success-banner">
+                <div class="icon">✓</div>
+                <h3>您的测评信息已提交</h3>
+                <p>工作人员将尽快通过微信 / 手机号与您联系，发送完整 PDF 报告</p>
+            </div>
+            
+            <div id="result-content"></div>
+            
+            <div class="disclaimer">
+                本测评基于职业心理学经典理论开发，结果仅供个人职业探索参考，不构成职业决策唯一依据；您的个人信息仅用于报告发送及咨询对接，严格保密，不作其他用途
+            </div>
+            
+            <div style="height: 80px;"></div>
+        </div>
+    </div>
+    
+    <button class="screenshot-btn" id="screenshot-btn" onclick="saveScreenshot()" style="display:none;" title="保存报告">
+        📷
+    </button>
+
+    <script>
+        // ==================== 测评题目数据（25题）====================
+        const questions = [
+            // 情感维度（35%权重）- 9题
+            { id: 1, dimension: 'emotional', subDimension: 'passion', stage: [1, 2], text: '想到自己可能从事热爱的工作，我会感到内心涌动一股热流', type: 'likert', reverse: false },
+            { id: 2, dimension: 'emotional', subDimension: 'passion', stage: [2, 3], text: '目前的工作或探索方向，能让我感受到发自内心的兴奋', type: 'likert', reverse: false },
+            { id: 3, dimension: 'emotional', subDimension: 'passion', stage: [3, 4], text: '我对正在从事的事业方向充满持续的热忱，这份热情不易消退', type: 'likert', reverse: false },
+            { id: 4, dimension: 'emotional', subDimension: 'meaning', stage: [1, 2], text: '我希望找到一份能让我感受到人生价值和意义的工作', type: 'likert', reverse: false },
+            { id: 5, dimension: 'emotional', subDimension: 'meaning', stage: [2, 3, 4], text: '我能够清晰地描述自己想要创造的价值和影响力', type: 'likert', reverse: false },
+            { id: 6, dimension: 'emotional', subDimension: 'meaning', stage: [3, 4], text: '我所做的事情与我的核心价值观高度一致', type: 'likert', reverse: false },
+            { id: 7, dimension: 'emotional', subDimension: 'regulation', stage: [1, 2], text: '当职业探索遇到挫折时，我能够较快调整情绪，重新出发', type: 'likert', reverse: false },
+            { id: 8, dimension: 'emotional', subDimension: 'regulation', stage: [2, 3, 4], text: '面对不确定性时，我能保持相对平和的心态，不过度焦虑', type: 'likert', reverse: false },
+            { id: 9, dimension: 'emotional', subDimension: 'regulation', stage: [1, 2, 3], text: '我经常因为不知道适合做什么而感到迷茫焦虑', type: 'likert', reverse: true },
+            
+            // 认知维度（30%权重）- 8题
+            { id: 10, dimension: 'cognitive', subDimension: 'selfAwareness', stage: [1, 2], text: '我清楚了解自己的核心优势和能力边界', type: 'likert', reverse: false },
+            { id: 11, dimension: 'cognitive', subDimension: 'selfAwareness', stage: [2, 3, 4], text: '我能够准确描述自己的职业兴趣类型和工作偏好', type: 'likert', reverse: false },
+            { id: 12, dimension: 'cognitive', subDimension: 'selfAwareness', stage: [3, 4], text: '我对自己的职业身份有清晰且稳定的认知', type: 'likert', reverse: false },
+            { id: 13, dimension: 'cognitive', subDimension: 'environment', stage: [1, 2], text: '我主动了解过不同行业或职业领域的发展现状和趋势', type: 'likert', reverse: false },
+            { id: 14, dimension: 'cognitive', subDimension: 'environment', stage: [2, 3], text: '我清楚目标领域的市场需求、竞争格局和入行门槛', type: 'likert', reverse: false },
+            { id: 15, dimension: 'cognitive', subDimension: 'path', stage: [2, 3], text: '我已经为自己制定了相对清晰的职业发展路线图', type: 'likert', reverse: false },
+            { id: 16, dimension: 'cognitive', subDimension: 'path', stage: [3, 4], text: '我知道接下来3个月、6个月、1年具体要达成什么目标', type: 'likert', reverse: false },
+            { id: 17, dimension: 'cognitive', subDimension: 'path', stage: [1, 2], text: '我对如何实现职业目标缺乏具体的想法', type: 'likert', reverse: true },
+            
+            // 行为维度（35%权重）- 8题
+            { id: 18, dimension: 'behavioral', subDimension: 'exploration', stage: [1, 2], text: '过去3个月，我主动尝试过新的领域或可能性（如课程、项目、志愿活动）', type: 'likert', reverse: false },
+            { id: 19, dimension: 'behavioral', subDimension: 'exploration', stage: [2, 3], text: '我有与目标领域从业者交流或建立连接的习惯', type: 'likert', reverse: false },
+            { id: 20, dimension: 'behavioral', subDimension: 'exploration', stage: [1, 2, 3], text: '我定期投入时间学习新技能或积累新经验', type: 'likert', reverse: false },
+            { id: 21, dimension: 'behavioral', subDimension: 'commitment', stage: [2, 3], text: '我已经在目标方向上投入了实质性资源（时间/金钱/人脉）', type: 'likert', reverse: false },
+            { id: 22, dimension: 'behavioral', subDimension: 'commitment', stage: [3, 4], text: '我能够为自己的选择承担风险和责任，不轻易放弃', type: 'likert', reverse: false },
+            { id: 23, dimension: 'behavioral', subDimension: 'commitment', stage: [3, 4], text: '我已在特定领域建立起一定的专业积累或成果', type: 'likert', reverse: false },
+            { id: 24, dimension: 'behavioral', subDimension: 'flexibility', stage: [2, 3], text: '当发现方向不合适时，我愿意及时调整策略或尝试新路径', type: 'likert', reverse: false },
+            { id: 25, dimension: 'behavioral', subDimension: 'flexibility', stage: [3, 4], text: '我能根据反馈快速迭代自己的行动计划', type: 'likert', reverse: false }
+        ];
+        
+        // ==================== 全局变量 ====================
+        let userInfo = {};
+        let currentQuestion = 0;
+        let answers = {};
+        
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.radio-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const group = this.closest('.radio-group');
+                    group.querySelectorAll('.radio-item').forEach(r => r.classList.remove('selected'));
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                });
+            });
+        });
+        
+        // ==================== 页面导航 ====================
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+        
+        // ==================== 开始测评 ====================
+        function startAssessment() {
+            const name = document.getElementById('name').value.trim();
+            const age = parseInt(document.getElementById('age').value);
+            const occupation = document.getElementById('occupation').value.trim();
+            const workStatus = document.querySelector('input[name="workStatus"]:checked');
+            const contact = document.getElementById('contact').value.trim();
+            
+            let hasError = false;
+            
+            if (!name) {
+                document.getElementById('name').classList.add('error');
+                document.getElementById('name-error').classList.add('show');
+                hasError = true;
+            } else {
+                document.getElementById('name').classList.remove('error');
+                document.getElementById('name-error').classList.remove('show');
+            }
+            
+            if (!age || age < 20 || age > 50) {
+                document.getElementById('age').classList.add('error');
+                document.getElementById('age-error').classList.add('show');
+                hasError = true;
+            } else {
+                document.getElementById('age').classList.remove('error');
+                document.getElementById('age-error').classList.remove('show');
+            }
+            
+            if (!occupation) {
+                document.getElementById('occupation').classList.add('error');
+                document.getElementById('occupation-error').classList.add('show');
+                hasError = true;
+            } else {
+                document.getElementById('occupation').classList.remove('error');
+                document.getElementById('occupation-error').classList.remove('show');
+            }
+            
+            if (!workStatus) {
+                document.getElementById('work-status-error').classList.add('show');
+                hasError = true;
+            } else {
+                document.getElementById('work-status-error').classList.remove('show');
+            }
+            
+            if (!contact) {
+                document.getElementById('contact').classList.add('error');
+                document.getElementById('contact-error').classList.add('show');
+                hasError = true;
+            } else {
+                document.getElementById('contact').classList.remove('error');
+                document.getElementById('contact-error').classList.remove('show');
+            }
+            
+            if (hasError) return;
+            
+            userInfo = {
+                name,
+                age,
+                occupation,
+                workStatus: workStatus.value,
+                contact,
+                timestamp: new Date().toISOString()
+            };
+            
+            currentQuestion = 0;
+            answers = {};
+            renderQuestions();
+            showQuestion(0);
+            showPage('page-assessment');
+        }
+        
+        // ==================== 渲染题目 ====================
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `question-${index}`;
+                
+                let html = `
+                    <span class="question-number">问题 ${index + 1} / ${questions.length}</span>
+                    <div class="question-text">${q.text}</div>
+                    <div class="likert-scale">
+                `;
+                
+                const labels = ['完全不符合', '比较不符合', '一般', '比较符合', '完全符合'];
+                for (let i = 1; i <= 5; i++) {
+                    html += `
+                        <label class="likert-item" onclick="selectOption(${index}, ${i})">
+                            <input type="radio" name="q${index}" value="${i}">
+                            <span class="likert-number">${i}</span>
+                            <span class="likert-text">${labels[i-1]}</span>
+                        </label>
+                    `;
+                }
+                
+                html += `
+                    </div>
+                    <div class="likert-labels">
+                        <span class="likert-label">完全不符合</span>
+                        <span class="likert-label">完全符合</span>
+                    </div>
+                `;
+                
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('nav-buttons').style.display = 'flex';
+        }
+        
+        // ==================== 选择选项 ====================
+        function selectOption(questionIndex, value) {
+            const card = document.getElementById(`question-${questionIndex}`);
+            card.querySelectorAll('.likert-item').forEach((item, idx) => {
+                if (idx + 1 === value) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+            
+            answers[questionIndex] = value;
+            
+            if (questionIndex < questions.length - 1) {
+                setTimeout(() => nextQuestion(), 300);
+            } else {
+                document.getElementById('next-btn').textContent = '提交测评';
+            }
+        }
+        
+        // ==================== 题目导航 ====================
+        function showQuestion(index) {
+            document.querySelectorAll('.question-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+            
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `第 ${index + 1} / ${questions.length} 题`;
+            
+            const prevBtn = document.querySelector('#nav-buttons .btn-secondary');
+            prevBtn.style.visibility = index === 0 ? 'hidden' : 'visible';
+            
+            const nextBtn = document.getElementById('next-btn');
+            if (index === questions.length - 1) {
+                nextBtn.textContent = answers[index] ? '提交测评' : '下一题';
+            } else {
+                nextBtn.textContent = '下一题';
+            }
+            
+            if (answers[index]) {
+                const card = document.getElementById(`question-${index}`);
+                card.querySelectorAll('.likert-item').forEach((item, i) => {
+                    if (i + 1 === answers[index]) {
+                        item.classList.add('selected');
+                    }
+                });
+            }
+            
+            currentQuestion = index;
+        }
+        
+        function nextQuestion() {
+            if (!answers[currentQuestion] && currentQuestion < questions.length - 1) {
+                const card = document.getElementById(`question-${currentQuestion}`);
+                card.style.animation = 'shake 0.5s';
+                setTimeout(() => card.style.animation = '', 500);
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            } else if (answers[currentQuestion]) {
+                submitAssessment();
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+        
+        // ==================== 计算测评结果 ====================
+        function calculateResult() {
+            const dimensions = {
+                emotional: { total: 0, count: 0 },
+                cognitive: { total: 0, count: 0 },
+                behavioral: { total: 0, count: 0 }
+            };
+            
+            const stageScores = {
+                1: { score: 0, count: 0 },
+                2: { score: 0, count: 0 },
+                3: { score: 0, count: 0 },
+                4: { score: 0, count: 0 }
+            };
+            
+            questions.forEach((q, index) => {
+                let score = answers[index];
+                
+                if (q.reverse) {
+                    score = 6 - score;
+                }
+                
+                dimensions[q.dimension].total += score;
+                dimensions[q.dimension].count++;
+                
+                q.stage.forEach(s => {
+                    stageScores[s].score += score;
+                    stageScores[s].count++;
+                });
+            });
+            
+            const emotionalT = 50 + (dimensions.emotional.total / dimensions.emotional.count - 3) * 10;
+            const cognitiveT = 50 + (dimensions.cognitive.total / dimensions.cognitive.count - 3) * 10;
+            const behavioralT = 50 + (dimensions.behavioral.total / dimensions.behavioral.count - 3) * 10;
+            
+            const stageWeightedScores = {};
+            for (let s = 1; s <= 4; s++) {
+                const stageAvg = stageScores[s].score / stageScores[s].count;
+                const stageT = 50 + (stageAvg - 3) * 10;
+                
+                let weightedScore = stageT;
+                if (s <= 2) weightedScore += (emotionalT - 50) * 0.35;
+                if (s >= 2 && s <= 3) weightedScore += (cognitiveT - 50) * 0.30;
+                if (s >= 3) weightedScore += (behavioralT - 50) * 0.35;
+                
+                stageWeightedScores[s] = weightedScore;
+            }
+            
+            let maxStage = 1;
+            let maxScore = stageWeightedScores[1];
+            for (let s = 2; s <= 4; s++) {
+                if (stageWeightedScores[s] > maxScore) {
+                    maxScore = stageWeightedScores[s];
+                    maxStage = s;
+                }
+            }
+            
+            const sortedStages = Object.entries(stageWeightedScores)
+                .map(([stage, score]) => ({ stage: parseInt(stage), score }))
+                .sort((a, b) => b.score - a.score);
+            
+            let resultStage = maxStage;
+            let isTransition = false;
+            let transitionStage = null;
+            
+            if (Math.abs(sortedStages[0].score - sortedStages[1].score) < 10) {
+                const s1 = sortedStages[0].stage;
+                const s2 = sortedStages[1].stage;
+                if (Math.abs(s1 - s2) === 1) {
+                    isTransition = true;
+                    transitionStage = Math.min(s1, s2);
+                }
+            }
+            
+            const threshold = 45;
+            let isUnknown = maxScore < threshold;
+            
+            let contextAdjustment = {};
+            
+            if (userInfo.age <= 30) {
+                contextAdjustment.ageGroup = 'young';
+            } else if (userInfo.age <= 35) {
+                contextAdjustment.ageGroup = 'mid';
+            } else {
+                contextAdjustment.ageGroup = 'senior';
+            }
+            
+            contextAdjustment.workStatus = userInfo.workStatus;
+            
+            return {
+                stage: resultStage,
+                isTransition,
+                transitionStage,
+                isUnknown,
+                stageScores: stageWeightedScores,
+                dimensions: {
+                    emotional: emotionalT.toFixed(1),
+                    cognitive: cognitiveT.toFixed(1),
+                    behavioral: behavioralT.toFixed(1)
+                },
+                contextAdjustment
+            };
+        }
+        
+        // ==================== 提交测评 ====================
+        function submitAssessment() {
+            showPage('page-loading');
+            
+            setTimeout(() => {
+                const result = calculateResult();
+                generateResultPage(result);
+                saveResult(result);
+                showPage('page-result');
+                document.getElementById('screenshot-btn').style.display = 'flex';
+            }, 1500);
+        }
+        
+        // ==================== 保存结果 ====================
+        function saveResult(result) {
+            const resultId = 'R' + Date.now().toString(36).toUpperCase();
+            const fullResult = {
+                id: resultId,
+                userInfo: { ...userInfo },
+                result: result,
+                answers: { ...answers },
+                createdAt: new Date().toISOString()
+            };
+            
+            const allResults = JSON.parse(localStorage.getItem('goldenCircleResults') || '[]');
+            allResults.push(fullResult);
+            localStorage.setItem('goldenCircleResults', JSON.stringify(allResults));
+        }
+        
+        // ==================== 生成结果页面 ====================
+        function generateResultPage(result) {
+            const stageNames = {
+                1: { name: '觉醒', class: 'stage-awakening' },
+                2: { name: '探索', class: 'stage-exploration' },
+                3: { name: '突破', class: 'stage-breakthrough' },
+                4: { name: '创造', class: 'stage-creation' }
+            };
+            
+            let stageDisplay = stageNames[result.stage].name;
+            let stageClass = stageNames[result.stage].class;
+            
+            if (result.isUnknown) {
+                stageDisplay = '阶段未明，建议深入探索';
+                stageClass = 'stage-unknown';
+            } else if (result.isTransition) {
+                const s1 = stageNames[result.transitionStage].name;
+                const s2 = stageNames[result.transitionStage + 1].name;
+                stageDisplay = `${s1}-${s2} 过渡期`;
+                stageClass = 'stage-transition';
+            }
+            
+            const content = generateStageContent(result);
+            
+            const html = `
+                <div class="result-header">
+                    <div class="result-badge ${stageClass}">${stageDisplay}</div>
+                    <div class="result-stage">${userInfo.name}的职业探索之旅</div>
+                    <div class="result-subtitle">${userInfo.occupation} · ${userInfo.workStatus} · ${userInfo.age}岁</div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-section-title">
+                        <span class="icon">🎯</span>
+                        你的当前阶段
+                    </div>
+                    <div class="result-content">
+                        <p>${content.stageDescription}</p>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-section-title">
+                        <span class="icon">⚠️</span>
+                        本阶段常见陷阱与避坑提示
+                    </div>
+                    <div class="result-content">
+                        <p>${content.traps}</p>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-section-title">
+                        <span class="icon">✅</span>
+                        本阶段核心行动清单
+                    </div>
+                    <div class="result-content">
+                        <ul class="action-list">
+                            ${content.actions.map((a, i) => `
+                                <li>
+                                    <span class="action-num">${i + 1}</span>
+                                    <span class="action-text">${a}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-section-title">
+                        <span class="icon">🚀</span>
+                        专属发展方向建议
+                    </div>
+                    <div class="result-content">
+                        ${content.development}
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-section-title">
+                        <span class="icon">💝</span>
+                        给你的看见与鼓励
+                    </div>
+                    <div class="encourage-box">
+                        ${content.encouragement}
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="report-box">
+                        <p>本次测评完整 <strong class="highlight">PDF 版报告</strong>将由工作人员通过您填写的<br><strong class="highlight">微信 / 手机号</strong>主动联系发送</p>
+                        <p>同时可预约 <strong class="highlight">1v1 测评解读咨询</strong>，深度分析你的职业探索路径～</p>
+                        <p>好内容值得分享，欢迎将本测评链接转发给身边有职业探索需求的朋友！</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('result-content').innerHTML = html;
+        }
+        
+        // ==================== 生成阶段内容 ====================
+        function generateStageContent(result) {
+            const stage = result.stage;
+            const workStatus = result.contextAdjustment.workStatus;
+            const ageGroup = result.contextAdjustment.ageGroup;
+            const isTransition = result.isTransition;
+            
+            const stageNames = { 1: '觉醒', 2: '探索', 3: '突破', 4: '创造' };
+            
+            const stageDescriptions = {
+                1: '你正处于职业觉醒阶段，内心开始察觉到现状与理想之间的落差。这是一个充满困惑但也孕育可能性的时期，你开始追问"我真正想要的是什么"。',
+                2: '你正处于职业探索阶段，actively 尝试不同的可能性。这是一个需要勇气的阶段，你愿意走出舒适区，去接触未知领域。',
+                3: '你正处于职业突破阶段，已在特定方向积累了一定基础，正面临从尝试到深耕的关键跨越。这是考验决心和执行力的时期。',
+                4: '你正处于职业创造阶段，已经建立起相对清晰的事业方向，正在将热爱转化为可持续的价值创造。这是收获与责任并存的阶段。'
+            };
+            
+            const workStatusContext = {
+                '全职在职': '在全职工作之余进行职业探索，需要更好地平衡主业与副业的时间投入',
+                '兼职': '灵活的兼职状态为你提供了探索空间，但也需要建立更清晰的边界',
+                '自由职业': '自由职业者的身份给予你灵活性，同时也需要你更强的自我管理能力',
+                '创业中': '创业之路充满挑战，资源整合和方向聚焦是当前的核心课题',
+                '职业空窗': '空窗期是难得的探索窗口，建立结构化的时间管理至关重要',
+                '其他': '无论处于何种状态，清晰的自我认知都是职业探索的基石'
+            };
+            
+            const traps = {
+                1: '<strong>陷阱一：过度思考，行动停滞。</strong>总是想"想清楚了再行动"，却陷入分析瘫痪。<strong>避坑法：</strong>设定"72小时行动原则"，有任何想法72小时内必须迈出最小一步。<br><br><strong>陷阱二：向外求答案。</strong>过度依赖他人建议，忽视内心真实声音。<strong>避坑法：</strong>每天预留15分钟"独处思考时间"，用纸笔记录真实感受。',
+                2: '<strong>陷阱一：广泛尝试，浅尝辄止。</strong>尝试了很多方向，但都只停留在表面。<strong>避坑法：</strong>采用"3个月深耕原则"，每个方向至少投入3个月再决定是否继续。<br><br><strong>陷阱二：信息过载。</strong>收集了大量信息却难以决策。<strong>避坑法：</strong>设定"信息截止时间"，列出3个决策关键标准，满足即行动。',
+                3: '<strong>陷阱一：完美主义拖延。</strong>总想准备万全再行动，错失时机。<strong>避坑法：</strong>践行"70分就出发"原则，允许自己在不完美中迭代。<br><br><strong>陷阱二：孤军奋战。</strong>试图独自解决所有问题，不愿求助。<strong>避坑法：</strong>建立"3人智囊团"，定期与同行或导师交流。',
+                4: '<strong>陷阱一：burnout。</strong>过度投入导致身心耗竭。<strong>避坑法：</strong>建立"能量补给清单"，每周预留专属恢复时间。<br><br><strong>陷阱二：路径依赖。</strong>固守已有模式，忽视环境变化。<strong>避坑法：</strong>每季度做一次"模式审视"，保持对新趋势的敏感度。'
+            };
+            
+            const actionTemplates = {
+                1: {
+                    '全职在职': [
+                        '每天记录"能量日志"：记录工作中哪些事项让你感到兴奋/疲惫，持续两周找出模式',
+                        '完成一份职业价值观排序练习，明确对你来说最重要的5个工作要素',
+                        '与3位不同行业的从业者进行"职业访谈"，了解他们的日常真实工作状态',
+                        '利用周末或下班后时间，尝试一件你感兴趣已久却一直没行动的小事'
+                    ],
+                    '兼职': [
+                        '梳理当前兼职工作与理想方向的关联度，明确是过渡还是长期选择',
+                        '建立"能力迁移地图"，识别现有技能如何应用到新领域',
+                        '设定每周固定的"探索时间块"，系统性地了解目标行业',
+                        '与2-3位全职从事你感兴趣领域的人深度交流'
+                    ],
+                    '自由职业': [
+                        '审视过去6个月的项目类型，分析哪些让你最有成就感',
+                        '建立个人作品集，提炼出最能代表你热情方向的3-5个案例',
+                        '主动接触目标领域的社群或圈子，建立弱关系连接',
+                        '尝试将部分工作内容向更感兴趣的方向倾斜'
+                    ],
+                    '创业中': [
+                        '重新审视创业初心，明确当前业务与个人热情的契合度',
+                        '识别并梳理现有资源中可用于新方向探索的部分',
+                        '与同行创业者进行深度交流，了解他们在类似阶段的选择',
+                        '设定"探索预算"（时间/金钱），在不影响主业的前提下试错'
+                    ],
+                    '职业空窗': [
+                        '建立每日结构化作息，设置固定的探索时间和休息时间',
+                        '列出10件"即使没有报酬也想做"的事，分析共同主题',
+                        '参加2-3个线上或线下的行业活动/课程，拓展信息渠道',
+                        '每周进行1次技能盘点，记录新学到的或发现需要提升的能力'
+                    ],
+                    '其他': [
+                        '完成一份全面的自我盘点：优势、热情、价值观、生活优先级',
+                        '列出"人生愿景清单"，想象5年后理想的一天是怎样的',
+                        '与信任的朋友或家人交流，了解他们眼中的你擅长什么',
+                        '尝试"100小时探索法"：选择一个方向投入100小时深入学习'
+                    ]
+                },
+                2: {
+                    '全职在职': [
+                        '制定"下班后2小时计划"，将探索时间固定化、仪式化',
+                        '选择一个最感兴趣的方向，报名相关课程或找到入门学习资源',
+                        '在目标领域寻找"最小可行项目"机会，积累实际经验',
+                        '建立"成长账户"，每月预留一笔专门用于自我提升的预算'
+                    ],
+                    '兼职': [
+                        '评估各兼职工作的ROI（回报/投入），逐步减少低价值投入',
+                        '选择1-2个主攻方向，拒绝其他分散精力的机会',
+                        '主动争取能够积累目标领域经验的项目或任务',
+                        '建立个人品牌，通过内容输出吸引目标领域的机会'
+                    ],
+                    '自由职业': [
+                        '筛选客户和项目，逐步提高理想方向项目的占比',
+                        '建立被动收入或服务产品，减少完全依赖时间换钱的模式',
+                        '寻找1-2位同行伙伴建立"探索同盟"，互相督促进步',
+                        '定期复盘，每季度评估一次方向是否需要微调'
+                    ],
+                    '创业中': [
+                        '进行市场调研，验证当前方向与市场需求的真实匹配度',
+                        '梳理核心竞争力，聚焦资源打造"尖刀产品/服务"',
+                        '建立关键合作伙伴关系，弥补自身资源短板',
+                        '设定明确的里程碑，定期检视进度并调整策略'
+                    ],
+                    '职业空窗': [
+                        '制定"探索日程表"，将每天划分为学习、实践、社交、休息模块',
+                        '选择1个主攻方向进行深度学习，同时保持对1-2个备选方向的关注',
+                        '主动创造实践机会：志愿项目、实习、自由接单等',
+                        '建立求职或启动计划，设定明确的时间节点'
+                    ],
+                    '其他': [
+                        '系统学习目标领域的基础知识，建立知识框架',
+                        '寻找实践机会，理论学习与实践验证相结合',
+                        '建立行业人脉网络，参加相关社群和活动',
+                        '设定阶段性目标，每完成一个小目标给予自己正向反馈'
+                    ]
+                },
+                3: {
+                    '全职在职': [
+                        '与上级沟通，争取在现有岗位中承担更多与热爱方向相关的项目',
+                        '制定"转型路线图"，设定从副业到全职的时间节点和条件',
+                        '建立目标领域的影响力，通过内容输出或社群参与建立个人品牌',
+                        '开始储备转型所需的资源和资金，降低决策压力'
+                    ],
+                    '兼职': [
+                        '逐步增加理想方向的工作占比，设定明确的比例目标',
+                        '建立稳定的客户或收入来源，提高经济安全感',
+                        '完善专业体系，考取相关认证或完成代表性项目',
+                        '评估全职投入的时机，做好心理和物质准备'
+                    ],
+                    '自由职业': [
+                        '优化商业模式，提高单位时间价值，减少重复性工作',
+                        '建立团队或合作网络，从个人服务向小团队运营升级',
+                        '沉淀方法论，将经验转化为课程、工具或咨询产品',
+                        '设定年度目标，平衡业务增长与个人成长'
+                    ],
+                    '创业中': [
+                        '聚焦核心业务，勇敢砍掉非核心或低价值的产品线/服务',
+                        '建立标准化流程，提高运营效率，释放创始人时间',
+                        '培养核心团队，逐步从执行者向战略者转型',
+                        '保持现金流健康，为长期发展储备资源'
+                    ],
+                    '职业空窗': [
+                        '将空窗期转化为"深度投入期"，全力积累目标领域的实战经验',
+                        '建立作品集和成果展示，弥补履历空白',
+                        '主动创造"被看见"的机会：开源贡献、社群分享、案例发布等',
+                        '准备好向雇主或合作伙伴讲述这段探索期的价值和收获'
+                    ],
+                    '其他': [
+                        '确立专业定位，成为某个细分领域的"小专家"',
+                        '建立可展示的成果或案例，积累社会证明',
+                        '构建支持系统：导师、同伴、合作伙伴',
+                        '设定明确的突破目标，全力以赴攻克关键里程碑'
+                    ]
+                },
+                4: {
+                    '全职在职': [
+                        '成为内部变革者，将热爱转化为组织内的创新项目或新业务发展',
+                        '建立外部影响力，成为行业社群的活跃贡献者',
+                        '培养接班人，为团队赋能，从个人贡献者向领导者转型',
+                        '持续学习，保持对新趋势和新技术的敏感度'
+                    ],
+                    '兼职': [
+                        '优化时间结构，在多元身份间建立更清晰的边界和协同',
+                        '探索跨界创新，将不同领域的经验融合创造新价值',
+                        '建立可持续的被动收入或自动化系统',
+                        '开始思考 legacy，如何将经验传承给后来者'
+                    ],
+                    '自由职业': [
+                        '从服务提供者向平台搭建者或内容创作者转型',
+                        '建立可规模化的产品或服务，突破个人时间天花板',
+                        '培养下一代，通过 mentorship 实现价值的乘法效应',
+                        '定期审视工作与生活的平衡，防止过度燃烧'
+                    ],
+                    '创业中': [
+                        '从创始人向企业家转型，建立不依赖创始人的组织系统',
+                        '思考企业使命和社会价值，平衡商业成功与意义创造',
+                        '建立创始人支持系统：顾问、教练、同行社群',
+                        '预留"创新时间"，保持对新机会的开放度'
+                    ],
+                    '职业空窗': [
+                        '将探索成果转化为可分享的输出：博客、播客、课程等',
+                        '建立多元收入来源，构建抗风险能力强的个人商业模式',
+                        '成为探索者的同行者，帮助他人少走弯路',
+                        '定期复盘人生整体满意度，不仅关注职业也关注其他人生领域'
+                    ],
+                    '其他': [
+                        '持续深化专业影响力，成为领域内的意见领袖',
+                        '探索事业与使命的融合，创造更大社会价值',
+                        '建立长期可持续发展的节奏，避免 burnout',
+                        '培养传承意识，将经验传递给下一代探索者'
+                    ]
+                }
+            };
+            
+            const developmentTemplates = {
+                1: {
+                    young: `<p><strong>【能力积累】</strong>25-30岁是试错成本最低的黄金期，重点在于广泛体验而非急于定位。建议将70%精力用于探索，30%用于深耕。利用业余时间参加不同类型的活动、课程、项目，通过"做中学"快速积累对自我和世界的认知。核心任务是建立"可能性地图"，了解有哪些选项。</p><p><strong>【资源整合】</strong>此阶段人脉网络比资金更重要。主动链接不同领域的从业者，参加行业活动和兴趣社群。寻找1-2位mentor，可以是比你大5-10岁的前辈。建立"学习账户"，每年预留专项预算用于自我投资。善用免费或低成本的在线资源快速入门。</p><p><strong>【阶段过渡】</strong>从觉醒到探索的关键是"迈出第一步"。克服"等我准备好"的思维，践行"边做边学"。设定"90天探索挑战"，在这90天内尽可能多地接触新领域。当某个方向让你持续兴奋超过3个月，就值得进一步深入探索。</p>`,
+                    mid: `<p><strong>【能力积累】</strong>31-35岁需要在广泛探索的基础上开始聚焦。盘点过去5年积累的可迁移技能，思考如何应用到新领域。建议采用"T型发展策略"：在一个主攻方向深耕的同时，保持对相邻领域的关注。核心任务是从"寻找热情"转向"培养热情"——热情往往随能力提升而增强。</p><p><strong>【资源整合】</strong>此阶段应该开始有策略地构建人脉网络。识别并主动链接目标领域的关键人物，提供价值先于索取。评估现有资源（时间、金钱、人脉、知识）在职业探索中的配置，必要时调整生活开支结构，为转型储备"探索基金"。</p><p><strong>【阶段过渡】</strong>平衡现实压力与理想追求是核心挑战。采用"双轨制"策略：稳住当前收入来源的同时，稳步发展热爱方向。设定明确的过渡里程碑，如"1年内副业收入达到主业的30%"。当热爱方向展现出可持续性时，再考虑全职投入。</p>`,
+                    senior: `<p><strong>【能力积累】</strong>36-40岁的探索应该建立在丰富人生阅历的基础上。你的优势是更清晰的自我认知和更强的执行力。重点不是从零开始，而是挖掘过去经历中隐藏的线索和模式。思考：哪些时刻让我最有成就感？我在什么情境下最能发挥影响力？核心任务是"整合"而非"重新开始"。</p><p><strong>【资源整合】</strong>此阶段你的资源和判断力都达到了较高水平。善用已有的人脉和信任基础，探索往往比年轻人更高效。考虑如何降低转型风险：财务储备、家庭沟通、渐进式过渡。利用"经验套利"——将你之前的行业经验带到新领域，往往能产生独特价值。</p><p><strong>【阶段过渡】</strong>从觉醒到探索需要克服"沉没成本"的心理障碍。记住：过去的经历不会浪费，它们都将成为新旅程的养分。设定清晰的探索边界：时间、金钱、机会成本。当找到方向后，利用你的执行力和资源快速建立立足点。</p>`
+                },
+                2: {
+                    young: `<p><strong>【能力积累】</strong>25-30岁的探索期应该追求"宽度+深度"的平衡。在保持一定广度的同时，对1-2个主要方向进行较深入的体验。每3-6个月进行一次方向复盘，问自己：这个方向是否依然吸引我？我是否看到了继续投入的价值？核心任务是验证假设，缩小选项范围。</p><p><strong>【资源整合】</strong>主动创造学习和实践的机会。争取参与跨部门项目、志愿活动、兼职或自由职业项目。建立"弱关系网络"——与不同领域的人保持联系，他们往往能带来意想不到的机会。利用社交媒体展示你的学习过程和思考，吸引同类人和机会。</p><p><strong>【阶段过渡】</strong>从探索到突破的标志是找到"甜蜜点"——热情、能力和市场需求的交汇点。当你发现某个方向让你愿意在困难时刻依然坚持，且能看到可行的变现或发展路径时，就是聚焦深耕的信号。开始减少其他方向的投入，将资源集中于主攻方向。</p>`,
+                    mid: `<p><strong>【能力积累】</strong>31-35岁应该开始建立专业深度。选择1-2个主攻方向，系统性地积累知识和技能。设定具体的里程碑：完成特定课程、获得认证、完成代表性项目。同时保持对行业趋势的敏感度，确保你的技能组合符合市场需求。核心任务是从"爱好者"成长为"准专业人士"。</p><p><strong>【资源整合】</strong>此阶段应该开始有选择地投入资源。评估哪些学习和实践机会ROI最高，优先投入。建立行业内的"强关系"——深度连接的同行、导师、潜在合作伙伴。开始思考如何将你正在发展的能力转化为收入，即使金额不大也是重要的验证。</p><p><strong>【阶段过渡】</strong>突破期的关键是"承诺"。当你对方向有了足够的信心，就需要做出更大胆的投入决定。这可能意味着辞职、创业、或大幅调整当前工作重心。设定清晰的决策标准：积累到什么程度、达到什么验证结果就全力投入。信任你的直觉，但也要用理性评估支撑决策。</p>`,
+                    senior: `<p><strong>【能力积累】</strong>36-40岁的探索应该更加聚焦和高效。你的学习速度和资源整合能力都更强，可以更快速地在新领域建立立足点。重点是将之前的经验与新领域结合，创造独特的价值主张。核心任务是快速验证模式，缩短从0到1的周期。</p><p><strong>【资源整合】</strong>善用你的阅历和人脉进行"资源杠杆"。你可能不需要像年轻人那样从零开始，而是可以通过合作、投资、顾问等方式快速进入新领域。考虑组建团队或寻找合伙人，弥补你可能缺乏的时间或精力。建立"顾问团"——在你探索的领域有经验的人，定期向他们请教。</p><p><strong>【阶段过渡】</strong>从探索到突破对你而言更多是心态转变而非能力问题。你可能已经具备了很多所需能力，需要的是全心投入的决心。评估现有承诺（家庭、财务、社会角色），与重要他人充分沟通，创造支持你突破的环境。当条件成熟时，果断行动。</p>`
+                },
+                3: {
+                    young: `<p><strong>【能力积累】</strong>25-30岁就能达到突破阶段是难得的，说明你已有清晰的方向和较强的执行力。此时的重点是"深耕"——在选定的领域建立真正的专业壁垒。追求"精通"而非"了解"，找到该领域最优秀的人学习。核心任务是建立代表作和口碑，让你在领域内被看见。</p><p><strong>【资源整合】</strong>开始建立个人品牌和影响力。通过内容输出、社群参与、演讲分享等方式让更多人知道你的专业。寻找mentor或加入高质量同行社群，与更优秀的人同行。审慎评估机会，对不符合主攻方向的诱惑说"不"。建立长期合作伙伴关系，共同成长。</p><p><strong>【阶段过渡】</strong>从突破到创造的标志是你的工作开始产生系统性的价值影响。你开始不仅为自己工作，而是在为更大的群体或使命工作。思考：我如何能让我的影响力超越个人时间？这可能就是产品化、团队化、或平台化的开始。保持耐心，深耕期需要时间沉淀。</p>`,
+                    mid: `<p><strong>【能力积累】</strong>31-35岁的突破阶段需要平衡"深度"与"可持续性"。在追求专业精进的同时，注意防止 burnout。建立支持系统：团队、工具、流程，让你的工作更高效。开始思考如何将你的能力转化为可规模化的价值。核心任务是从"做事"向"建系统"转变。</p><p><strong>【资源整合】</strong>此阶段应该建立更成熟的商业或个人发展模式。评估收入来源的多样性，降低单一依赖风险。建立"核心圈"——深度信任的合作者和顾问。开始为下一阶段储备资源：资金、人才、机会。保持对市场的敏感度，确保你的方向与趋势一致。</p><p><strong>【阶段过渡】</strong>突破到创造是质变的过程。当你发现自己在解决的不只是个人生存问题，而是在回应更大的社会需求时，你就正在进入创造阶段。思考你的 legacy：我希望因为什么被记住？如何让我的创造持续产生价值？</p>`,
+                    senior: `<p><strong>【能力积累】</strong>36-40岁的突破阶段应该追求"智慧型精通"。你不仅有技能，还有判断力——知道什么是重要的、什么是该放弃的。将你的经验提炼为方法论，能够指导他人。核心任务是从"个人贡献者"向"价值放大者"转变，让你的经验和智慧影响更多人。</p><p><strong>【资源整合】</strong>此阶段你有丰富的资源可以调配。思考如何构建一个支持你的愿景的生态系统：合作伙伴、团队、平台。开始考虑 legacy 建设：mentorship、内容创作、社会贡献。建立可持续的商业模式，让你的创造能够持续而不依赖你的全时投入。</p><p><strong>【阶段过渡】</strong>从突破到创造对你而言是自然的过程。你已经证明了模式的可行性，现在是如何放大影响。思考更宏大的愿景：我希望创造什么样的改变？为此需要联合谁、建立什么？允许自己从执行中逐步退出，更多地在战略和愿景层面发挥影响力。</p>`
+                },
+                4: {
+                    young: `<p><strong>【能力积累】</strong>25-30岁就进入创造阶段是非常罕见的，说明你既有清晰的热情方向，又有超越同龄人的执行力。此时的挑战是"可持续"——如何在保持创造热情的同时避免过早 burnout。建立健康的工作节奏，投资身心健康。核心任务是建立支持系统，让你的创造能够持续而非依赖个人燃烧。</p><p><strong>【资源整合】</strong>开始构建团队或合作网络，从个人创造向组织创造转变。建立品牌资产：知识产权、内容资产、社群资产。思考如何让你的创造产生复利效应。寻找mentor或同行者，创造阶段的孤独感可能更强，需要支持系统。</p><p><strong>【阶段延续】</strong>创造不是终点而是持续的过程。保持学习和进化，今天的成功模式可能明天就会过时。定期审视：我的创造是否仍然与我的热情和价值观一致？是否仍然服务于我真正在乎的人群？保持初心，同时拥抱变化。</p>`,
+                    mid: `<p><strong>【能力积累】</strong>31-35岁的创造阶段应该追求"影响力的深化"。不仅做更多，而是做更有价值的事。思考如何从你的创造中提取更大的杠杆：团队培养、方法论沉淀、平台搭建。核心任务是从"创造者"向"赋能者"转变，让你的创造能够激发更多人的创造。</p><p><strong>【资源整合】</strong>建立多元化的价值创造系统。除了主营业务，考虑知识分享、投资、顾问等多元角色。构建"生态位"——你在某个细分领域的不可替代性。建立长期主义视角，投资那些短期回报不明显但长期重要的资产。</p><p><strong>【阶段延续】</strong>创造阶段的最大风险是停滞或重复自己。保持对新可能性的开放，定期进行"战略刷新"。思考下一阶段：是深化现有方向，还是开辟新的创造领域？保持与初心和使命的连接，让你的创造持续有意义。</p>`,
+                    senior: `<p><strong>【能力积累】</strong>36-40岁的创造阶段应该追求"智慧的传承"。你积累的不仅是技能和成果，更是判断力和智慧。将这些隐性知识显性化，通过 mentorship、内容创作、咨询等方式传递给下一代。核心任务是从"做"向"教"转变，让你的经验成为他人的养分。</p><p><strong>【资源整合】</strong>利用你的影响力和资源创造更大的社会价值。考虑社会企业、公益项目、行业推动等方式回馈社会。建立"接班人"或团队，让你的创造能够在没有你的情况下继续。构建支持系统防止 burnout，创造阶段的责任和压力可能很大。</p><p><strong>【阶段延续】</strong>创造是一个不断进化的过程，没有终点。定期审视人生的整体满意度：职业成功是否伴随着其他人生领域的丰盛？考虑如何整合职业、家庭、健康、社会贡献，追求更全面的"人生创造"。保持谦逊和好奇心，继续学习和成长。</p>`
+                }
+            };
+            
+            const encouragements = {
+                1: '觉察本身就是改变的开始。你已经开始了一场重要的人生对话——与真实的自己对话。这个阶段可能充满不确定和焦虑，但请相信：每一个勇敢的觉察，都在为未来的清晰铺路。你不需要立刻知道答案，只需要保持对内心的诚实。',
+                2: '探索的勇气比探索的结果更珍贵。你正在用行动回应内心的召唤，这已经超越了大多数人。每一次尝试、每一次对话、每一次学习，都在为你积累未来的可能性。相信自己的直觉，同时保持开放——惊喜往往在意料之外。',
+                3: '突破的路上没有容易二字，但正是这份不易塑造了真正的你。你已经走过了探索和尝试的阶段，现在需要的是坚持和深耕。遇到困难时，记得提醒自己为什么出发。你的热爱值得这份投入，世界也在等待你独特的贡献。',
+                4: '你已经在用行动将热爱转化为价值，这本身就是一种成就。创造的路上请记得照顾好自己，sustainable的创造比爆发式的燃烧更珍贵。你的经验正在激励和影响着他人，这份 legacy 将超越时间和空间。'
+            };
+            
+            if (isTransition) {
+                return {
+                    stageDescription: `你正处于${stageNames[result.transitionStage]}与${stageNames[result.transitionStage + 1]}的过渡期。这意味着你既具备前一阶段的特征，又开始展现出后一阶段的潜力。${stageDescriptions[result.transitionStage]} 同时，你也开始感受到下一阶段的力量在召唤。这是一个充满可能性的时期，保持耐心，让转变自然发生。`,
+                    traps: traps[result.transitionStage] + '<br><br><strong>【过渡期特别陷阱】</strong>在两个阶段之间摇摆不定，既想保持旧有模式的安全感，又渴望新阶段的可能性。避坑法：接纳这是一个自然的过渡过程，给自己时间整合两个阶段的资源，不必急于"站队"。',
+                    actions: actionTemplates[result.transitionStage][workStatus],
+                    development: developmentTemplates[result.transitionStage][ageGroup] + '<p><strong>【过渡期特别提示】</strong>过渡期不是"问题"而是"机会"。利用这个阶段整合两个阶段的资源和经验，你可能会创造出独特的路径。不要急于给自己贴标签，允许自己处于一个"既...又..."的状态。当准备就绪时，转变会自然发生。</p>',
+                    encouragement: encouragements[result.transitionStage] + ' 同时，下一阶段的新可能正在向你招手，保持开放和期待。'
+                };
+            }
+            
+            if (result.isUnknown) {
+                return {
+                    stageDescription: `根据测评结果，你当前的职业探索阶段尚不够清晰。这可能意味着你正处于一个重大转变期，或者同时受到多个方向的影响。不必担心，这反而是重新审视自己的好机会。${workStatusContext[workStatus]}。建议你给自己更多时间和空间，允许答案慢慢浮现。`,
+                    traps: '<strong>陷阱一：急于给自己贴标签。</strong>因为想要明确答案而过早做出选择。<strong>避坑法：</strong>接纳模糊性，给自己3-6个月的"探索宽限期"，不急于下结论。<br><br><strong>陷阱二：信息收集瘫痪。</strong>收集了大量信息但无法整合决策。<strong>避坑法：</strong>设定"最小决策标准"，列出3个最关键的因素，满足即行动。',
+                    actions: [
+                        '暂停"找答案"，先进行"整理"：写下你所有的兴趣、可能性、顾虑，梳理混乱的思绪',
+                        '与3-5位不同背景的人深度交流，了解他们是如何找到自己的方向的',
+                        '尝试"100小时法则"：选择1-2个最感兴趣的方向，各投入50小时深入体验后再评估',
+                        '建立"每日觉察练习"：每天花10分钟记录什么让你感到兴奋、什么让你感到 drained'
+                    ],
+                    development: `<p><strong>【能力积累】</strong>阶段不清晰往往是自我认知需要更新的信号。利用这段时间进行全面的自我盘点：价值观、优势、兴趣、生活优先级。尝试不同类型的测评工具（MBTI、盖洛普优势、霍兰德等）作为参考，但不要被定义。核心任务是"重新认识自己"——可能你已经改变，只是还没来得及更新自我认知。</p><p><strong>【资源整合】</strong>这个阶段人脉资源尤为重要。主动与不同领域的人交流，不是为了找答案，而是为了拓宽视野。参加一些跨界活动或社群，让自己接触不同的思维方式。考虑寻求职业咨询师或教练的支持，专业人士能帮助你更快地梳理混乱。</p><p><strong>【阶段定位】</strong>阶段不清晰不是失败，而是深度的前奏。很多重要的转变都始于一段"迷失期"。保持基本的日常结构（作息、健康、社交），在此基础上允许探索。设定一个"再评估时间点"（如3个月后），到那时如果仍然不清晰，再寻求更多外部支持。</p>`,
+                    encouragement: '迷茫不是错误，而是成长的邀请。在这个看似"卡住"的时刻，你其实正在经历重要的内在整合。对自己温柔一点，答案往往在最放松的时候浮现。你已经迈出了最重要的一步——开始寻找。相信过程，相信自己。'
+                };
+            }
+            
+            return {
+                stageDescription: stageDescriptions[stage] + workStatusContext[workStatus] + '。',
+                traps: traps[stage],
+                actions: actionTemplates[stage][workStatus],
+                development: developmentTemplates[stage][ageGroup],
+                encouragement: encouragements[stage]
+            };
+        }
+        
+        function saveScreenshot() {
+            alert('提示：请使用手机/电脑自带的截图功能保存报告\n\n手机：同时按住电源键+音量减键\n电脑：按 PrintScreen 或 Win+Shift+S');
+        }
+    </script>
+</body>
+</html>
